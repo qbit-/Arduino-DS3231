@@ -1,9 +1,12 @@
 /*
 DS3231.h - Header file for the DS3231 Real-Time Clock
 
-Version: 1.0.1
+Version: 1.0.2
 (c) 2014 Korneliusz Jarzebski
 www.jarzebski.pl
+
+qbit
+www.github.com/qbit-
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the version 3 GNU General Public License as
@@ -20,12 +23,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #ifndef DS3231_h
 #define DS3231_h
-
-#if ARDUINO >= 100
-#include "Arduino.h"
-#else
-#include "WProgram.h"
-#endif
 
 #define DS3231_ADDRESS              (0x68)
 
@@ -89,14 +86,11 @@ typedef enum
 class DS3231
 {
     public:
-
-	bool begin(void);
-
+        DS3231(I2C& _bus);
 	void setDateTime(uint16_t year, uint8_t month, uint8_t day, uint8_t hour, uint8_t minute, uint8_t second);
 	void setDateTime(uint32_t t);
 	void setDateTime(const char* date, const char* time);
 	RTCDateTime getDateTime(void);
-	uint8_t isReady(void);
 
 	DS3231_sqw_t getOutput(void);
 	void setOutput(DS3231_sqw_t mode);
@@ -130,6 +124,7 @@ class DS3231
 	char* dateFormat(const char* dateFormat, RTCAlarmTime dt);
 
     private:
+        I2C&  _bus;
 	RTCDateTime t;
 
 	char *strDayOfWeek(uint8_t dayOfWeek);
